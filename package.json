@@ -1,0 +1,24 @@
+{
+  "name": "class-bank",
+  "version": "0.0.0",
+  "description": "A classroom banking system",
+  "scripts": {
+    "start": "zwitterion --port 4444"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lastmjs/class-bank.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lastmjs/class-bank/issues"
+  },
+  "homepage": "https://github.com/lastmjs/class-bank#readme",
+  "dependencies": {
+    "lit-html": "1.1.2",
+    "redux": "4.0.5",
+    "zwitterion": "0.44.2"
+  }
+}
