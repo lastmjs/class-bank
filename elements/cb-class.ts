@@ -83,10 +83,6 @@ class CBClass extends HTMLElement {
 
             <h3>Accounts</h3>
             
-            <div>
-                <button>Generate new account</button>
-            </div>
-
             <br>
 
             <div>

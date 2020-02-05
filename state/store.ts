@@ -67,6 +67,22 @@ function rootReducer(
         };
     }
 
+    if (action.type === 'ADD_TO_BALANCE') {
+
+        const account: Readonly<Account> = state.accounts[action.accountId];
+
+        return {
+            ...state,
+            accounts: {
+                ...state.accounts,
+                [account.id]: {
+                    ...account,
+                    balance: account.balance + action.amount
+                }
+            }
+        };
+    }
+
     return state;
 }
 

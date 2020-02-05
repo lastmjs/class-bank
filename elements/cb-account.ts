@@ -27,6 +27,16 @@ class CBAccount extends HTMLElement {
         });
     }
 
+    addToBalance() {
+        const dollarAmount = this.querySelector(`#input-dollar-amount`).value;
+
+        Store.dispatch({
+            type: 'ADD_TO_BALANCE',
+            accountId: this.accountId,
+            amount: dollarAmount * 100
+        });
+    }
+
     render(state: Readonly<State>): Readonly<TemplateResult> {
 
         const account: Readonly<Account> | undefined = state.accounts[this.accountId];
@@ -40,7 +50,13 @@ class CBAccount extends HTMLElement {
 
             <h2>${account.id}</h2>
 
-            <h3>Balance: ${account.balance}</h3>
+            <h3>Balance: $${(account.balance / 100).toFixed(2)}</h3>
+
+            <br>
+
+            <input id="input-dollar-amount" type="number" placeholder="Enter dollar amount">
+
+            <button @click=${() => this.addToBalance()}>Add to balance</button>
         `;
     }
 }
