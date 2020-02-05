@@ -4,7 +4,7 @@
   "description": "A classroom banking system",
   "scripts": {
     "start": "zwitterion --port 4444",
-    "build": "zwitterion --port 4444 --build-static --exclude node_modules --include lit-html,redux"
+    "build": "zwitterion --port 4444 --build-static --exclude node_modules,web_modules --include lit-html"
   },
   "repository": {
     "type": "git",

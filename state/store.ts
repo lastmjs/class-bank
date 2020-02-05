@@ -1,6 +1,6 @@
 import { 
     createStore
-} from 'redux';
+} from '../web_modules/redux';
 import {
     State,
     Action,
