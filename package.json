@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "A classroom banking system",
   "scripts": {
-    "start": "zwitterion --port 4444"
+    "start": "zwitterion --port 4444",
+    "build": "zwitterion --port 4444 --exclude node_modules --include lit-html,redux"
   },
   "repository": {
     "type": "git",
