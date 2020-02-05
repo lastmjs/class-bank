@@ -9,6 +9,7 @@ import {
     Class
 } from '../index.d';
 import Quagga from '../web_modules/quagga.js';
+import { navigate } from '../services/utilities';
 
 class CBClass extends HTMLElement {
 
@@ -65,7 +66,7 @@ class CBClass extends HTMLElement {
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
 
-        const theClass: Readonly<Class> = state.classes[this.classId];
+        const theClass: Readonly<Class> | undefined = state.classes[this.classId];
 
         if (theClass === undefined) {
             return html`<div>Loading...</div>`;
@@ -92,9 +93,11 @@ class CBClass extends HTMLElement {
                 <button @click=${() => this.scanNewAccount()}>Scan new account</button>
             </div>
 
+            <br>
+
             <div>
                 ${accounts.map((account: Readonly<Account>) => {
-                    return html`<div>${account.name}</div>`;
+                    return html`<div style="padding: 5px; cursor: pointer" @click=${() => navigate(`/account?accountId=${account.id}`)}>${account.id}</div>`;
                 })}
             </div>
 

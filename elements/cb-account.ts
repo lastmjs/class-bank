@@ -5,10 +5,14 @@ import {
 } from 'lit-html';
 import { Store } from '../state/store';
 import {
-    State
+    State,
+    Account
 } from '../index.d';
 
 class CBAccount extends HTMLElement {
+
+    accountId: string | null;
+
     constructor() {
         super();
 
@@ -24,8 +28,19 @@ class CBAccount extends HTMLElement {
     }
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
+
+        const account: Readonly<Account> | undefined = state.accounts[this.accountId];
+
+        if (account === undefined) {
+            return html`<div>Loading...</div>`;
+        }
+
         return html`
-            cb-account
+            <h1>Account</h1>
+
+            <h2>${account.id}</h2>
+
+            <h3>Balance: ${account.balance}</h3>
         `;
     }
 }
