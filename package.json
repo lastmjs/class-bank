@@ -18,7 +18,11 @@
   "homepage": "https://github.com/lastmjs/class-bank#readme",
   "dependencies": {
     "lit-html": "1.1.2",
+    "quagga": "0.12.1",
     "redux": "4.0.5",
     "zwitterion": "0.44.2"
+  },
+  "devDependencies": {
+    "snowpack": "^1.1.4"
   }
 }

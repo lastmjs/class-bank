@@ -10,3 +10,9 @@ export function navigate(path: string) {
         }  
     });
 }
+
+// TODO probably not the best, but very simple, very random I assume, and no dependencies
+// TODO the popular Node.js uuid library doesn't have a simple browser-compatible build
+export function uuid() {
+    return window.crypto.getRandomValues(new Uint8Array(16)).join('');
+}

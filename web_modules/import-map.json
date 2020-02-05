@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "lit-html": "./lit-html.js",
+    "quagga": "./quagga.js",
+    "redux": "./redux.js"
+  }
+}

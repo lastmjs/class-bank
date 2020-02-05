@@ -30,9 +30,6 @@ class CBApp extends HTMLElement {
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
         return html`
-            <button @click=${() => navigate('/classes')}>Classes</button>
-            <button @click=${() => navigate('/class')}>Class</button>
-            <button @click=${() => navigate('/account')}>Account</button>
             <cb-router></cb-router>
         `;
     }

@@ -5,15 +5,35 @@ import {
 
 export type State = {
     readonly route: Readonly<Route>;
+    readonly classes: Readonly<{
+        [id: string]: Readonly<Class>;
+    }>;
+    readonly accounts: Readonly<{
+        [id: string]: Readonly<Account>;
+    }>;
 };
 
 export type Action = 
+    CREATE_CLASS |
+    CREATE_ACCOUNT |
     SET_ROUTE |
     RENDER;
 
 type SET_ROUTE = {
     readonly type: 'SET_ROUTE';
     readonly route: Readonly<Route>;
+};
+
+type CREATE_CLASS = {
+    readonly type: 'CREATE_CLASS';
+    readonly name: string;
+};
+
+type CREATE_ACCOUNT = {
+    readonly type: 'CREATE_ACCOUNT';
+    readonly id: string;
+    readonly classId: string;
+    readonly name: string;
 };
 
 type RENDER = {
