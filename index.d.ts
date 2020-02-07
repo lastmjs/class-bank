@@ -3,36 +3,47 @@ import {
     Store
 } from 'redux';
 
-export type State = {
+export type GlobalState = {
     readonly route: Readonly<Route>;
-    readonly classes: Readonly<{
-        [id: string]: Readonly<Class>;
-    }>;
-    readonly accounts: Readonly<{
-        [id: string]: Readonly<Account>;
-    }>;
+    readonly studentGroups: Readonly<StudentGroups>;
+    readonly studentAccounts: Readonly<StudentAccounts>;
 };
 
+export type StudentGroups = Readonly<{
+    [id: string]: Readonly<StudentGroup>;
+}>;
+
+export type StudentAccounts = Readonly<{
+    [id: string]: Readonly<StudentAccount>;
+}>;
+
 export type Action = 
-    CREATE_CLASS |
-    CREATE_ACCOUNT |
+    ADD_TO_BALANCE |
+    CREATE_STUDENT_GROUP |
+    CREATE_STUDENT_ACCOUNT |
     SET_ROUTE |
     RENDER;
+
+type ADD_TO_BALANCE = {
+    readonly type: 'ADD_TO_BALANCE';
+    readonly studentAccountId: string;
+    readonly amount: USDCents;
+};
 
 type SET_ROUTE = {
     readonly type: 'SET_ROUTE';
     readonly route: Readonly<Route>;
 };
 
-type CREATE_CLASS = {
-    readonly type: 'CREATE_CLASS';
+type CREATE_STUDENT_GROUP = {
+    readonly type: 'CREATE_STUDENT_GROUP';
     readonly name: string;
 };
 
-type CREATE_ACCOUNT = {
-    readonly type: 'CREATE_ACCOUNT';
+type CREATE_STUDENT_ACCOUNT = {
+    readonly type: 'CREATE_STUDENT_ACCOUNT';
     readonly id: string;
-    readonly classId: string;
+    readonly studentGroupId: string;
     readonly name: string;
 };
 
@@ -40,24 +51,24 @@ type RENDER = {
     readonly type: 'RENDER';
 };
 
-export type CBStore = Readonly<Store<Readonly<State>, Readonly<Action>>>;
+export type CBGlobalStore = Readonly<Store<Readonly<GlobalState>, Readonly<Action>>>;
 
 export type Route = {
-    pathname: string;
-    search: string;
+    readonly pathname: string;
+    readonly search: string;
 };
 
 type USDCents = number;
 
-export type Class = {
-    id: string;
-    name: string;
+export type StudentGroup = {
+    readonly id: string;
+    readonly name: string;
 };
 
-export type Account = {
-    id: string;
-    name: string;
-    balance: USDCents;
-    classId: string;
+export type StudentAccount = {
+    readonly id: string;
+    readonly name: string;
+    readonly balance: USDCents;
+    readonly studentGroupId: string;
     // barcode: string; // TODO I am not sure what this type will actually be, we might be able to just generate it from the id
 };

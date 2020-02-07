@@ -3,15 +3,16 @@ import {
     html,
     TemplateResult
 } from 'lit-html';
-import { Store } from '../state/store';
+import { GlobalStore } from '../state/store';
 import {
-    State
+    Route
 } from '../index.d';
-import './cb-classes';
-import './cb-class';
-import './cb-account';
+import './cb-student-groups';
+import './cb-student-group';
+import './cb-student-account';
+import { createObjectStore } from 'reduxular';
 
-Store.dispatch({
+GlobalStore.dispatch({
     type: 'SET_ROUTE',
     route: {
         pathname: window.location.pathname,
@@ -20,7 +21,7 @@ Store.dispatch({
 });
 
 window.addEventListener('popstate', () => {
-    Store.dispatch({
+    GlobalStore.dispatch({
         type: 'SET_ROUTE',
         route: {
             pathname: window.location.pathname,
@@ -29,30 +30,35 @@ window.addEventListener('popstate', () => {
     });
 });
 
+type State = {
+    readonly route: Readonly<Route>;
+};
+
+const InitialState: Readonly<State> = {
+    route: GlobalStore.getState().route
+};
+
 class CBRouter extends HTMLElement {
-    constructor() {
-        super();
 
-        Store.subscribe(() => litRender(this.render(Store.getState()), this));
-    }
+    readonly store = (() => {
 
-    connectedCallback() {
-        setTimeout(() => {
-            Store.dispatch({
-                type: 'RENDER'
-            });
+        GlobalStore.subscribe(() => {
+            this.store.route = GlobalStore.getState().route;
         });
-    }
+
+        return createObjectStore(InitialState, (state: Readonly<State>) => {
+            litRender(this.render(state), this);
+        }, this);
+    })();
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
-
-        const classId: string | null = new URLSearchParams(state.route.search).get('classId');
-        const accountId: string | null = new URLSearchParams(state.route.search).get('accountId');
+        const studentGroupId: string | null = new URLSearchParams(state.route.search).get('studentGroupId'); 
+        const studentAccountId: string | null = new URLSearchParams(state.route.search).get('studentAccountId'); 
 
         return html`
-            <cb-classes ?hidden=${state.route.pathname !== '/' && state.route.pathname !== '/classes'}></cb-classes>
-            <cb-class ?hidden=${state.route.pathname !== '/class'} .classId=${classId}></cb-class>
-            <cb-account ?hidden=${state.route.pathname !== '/account'} .accountId=${accountId}></cb-account>
+            <cb-student-groups ?hidden=${state.route.pathname !== '/' && state.route.pathname !== '/classes'}></cb-student-groups>
+            <cb-student-group ?hidden=${state.route.pathname !== '/student-group'} .studentGroupId=${studentGroupId}></cb-student-group>
+            <cb-student-account ?hidden=${state.route.pathname !== '/student-account'} .studentAccountId=${studentAccountId}></cb-student-account>
         `;
     }
 }

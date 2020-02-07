@@ -1,8 +1,8 @@
-import { Store } from '../state/store';
+import { GlobalStore } from '../state/store';
 
 export function navigate(path: string) {
     history.pushState({}, '', path);
-    Store.dispatch({
+    GlobalStore.dispatch({
         type: 'SET_ROUTE',
         route: {
             pathname: window.location.pathname,

@@ -4,7 +4,7 @@
   "description": "A classroom banking system",
   "scripts": {
     "start": "zwitterion --port 4444",
-    "build": "zwitterion --port 4444 --build-static --exclude node_modules,web_modules --include lit-html"
+    "build": "zwitterion --port 4444 --build-static --exclude node_modules,web_modules --include lit-html,reduxular,redux/es"
   },
   "repository": {
     "type": "git",
@@ -20,10 +20,10 @@
   "dependencies": {
     "lit-html": "1.1.2",
     "quagga": "0.12.1",
-    "redux": "4.0.5",
-    "zwitterion": "0.44.2"
+    "reduxular": "0.0.2",
+    "zwitterion": "0.45.0"
   },
   "devDependencies": {
-    "snowpack": "^1.1.4"
+    "snowpack": "1.1.4"
   }
 }

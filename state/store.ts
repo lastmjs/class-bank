@@ -1,32 +1,32 @@
 import { 
     createStore
-} from '../web_modules/redux';
+} from 'reduxular';
 import {
-    State,
+    GlobalState,
     Action,
-    CBStore,
-    Class,
-    Account
+    CBGlobalStore,
+    StudentGroup,
+    StudentAccount
 } from '../index.d';
 import {
     uuid
 } from '../services/utilities';
 
-const persistedState: Readonly<State> | null = JSON.parse(window.localStorage.getItem('state'));
+const persistedGlobalState: Readonly<GlobalState> | null = JSON.parse(window.localStorage.getItem('GlobalState'));
 
-const InitialState: Readonly<State> = persistedState || {
+const InitialGlobalState: Readonly<GlobalState> = persistedGlobalState || {
     route: {
         pathname: '/',
         search: ''
     },
-    classes: {},
-    accounts: {}
+    studentGroups: {},
+    studentAccounts: {}
 };
 
 function rootReducer(
-    state: Readonly<State> = InitialState,
+    state: Readonly<GlobalState> = InitialGlobalState,
     action: Readonly<Action>
-): Readonly<State> {
+): Readonly<GlobalState> {
 
     if (action.type === 'SET_ROUTE') {
         return {
@@ -35,49 +35,49 @@ function rootReducer(
         };
     }
 
-    if (action.type === 'CREATE_CLASS') {
-        const newClass: Readonly<Class> = {
+    if (action.type === 'CREATE_STUDENT_GROUP') {
+        const newStudentGroup: Readonly<StudentGroup> = {
             id: uuid(),
             name: action.name
         };
 
         return {
             ...state,
-            classes: {
-                ...state.classes,
-                [newClass.id]: newClass
+            studentGroups: {
+                ...state.studentGroups,
+                [newStudentGroup.id]: newStudentGroup
             }
         };
     }
 
-    if (action.type === 'CREATE_ACCOUNT') {
-        const newAccount: Readonly<Account> = {
+    if (action.type === 'CREATE_STUDENT_ACCOUNT') {
+        const newStudentAccount: Readonly<StudentAccount> = {
             id: action.id,
             name: action.name,
-            classId: action.classId,
+            studentGroupId: action.studentGroupId,
             balance: 0
         };
 
         return {
             ...state,
-            accounts: {
-                ...state.accounts,
-                [newAccount.id]: newAccount
+            studentAccounts: {
+                ...state.studentAccounts,
+                [newStudentAccount.id]: newStudentAccount
             }
         };
     }
 
     if (action.type === 'ADD_TO_BALANCE') {
 
-        const account: Readonly<Account> = state.accounts[action.accountId];
+        const studentAccount: Readonly<StudentAccount> = state.studentAccounts[action.studentAccountId];
 
         return {
             ...state,
-            accounts: {
-                ...state.accounts,
-                [account.id]: {
-                    ...account,
-                    balance: account.balance + action.amount
+            studentAccounts: {
+                ...state.studentAccounts,
+                [studentAccount.id]: {
+                    ...studentAccount,
+                    balance: studentAccount.balance + action.amount
                 }
             }
         };
@@ -86,10 +86,10 @@ function rootReducer(
     return state;
 }
 
-export const Store: Readonly<CBStore> = createStore((state: Readonly<State>, action: Readonly<Action>) => {
-    const newState: Readonly<State> = rootReducer(state, action);
+export const GlobalStore: Readonly<CBGlobalStore> = createStore((state: Readonly<GlobalState>, action: Readonly<Action>) => {
+    const newState: Readonly<GlobalState> = rootReducer(state, action);
 
-    window.localStorage.setItem('state', JSON.stringify(newState));
+    window.localStorage.setItem('GlobalState', JSON.stringify(newState));
 
     return newState;
 });

@@ -4,29 +4,27 @@ import {
     TemplateResult
 } from 'lit-html';
 import './cb-router';
-import { Store } from '../state/store';
-import {
-    State
-} from '../index.d';
-import {
-    navigate
-} from '../services/utilities';
+import { GlobalStore } from '../state/store';
+import { createObjectStore } from 'reduxular';
+
+type State = {};
+
+const InitialState: Readonly<State> = {};
 
 class CBApp extends HTMLElement {
 
-    constructor() {
-        super();
+    readonly store = (() => {
 
-        Store.subscribe(() => litRender(this.render(Store.getState()), this));
-    }
-
-    connectedCallback() {
-        setTimeout(() => {
-            Store.dispatch({
+        GlobalStore.subscribe(() => {
+            this.store.dispatch({
                 type: 'RENDER'
             });
         });
-    }
+
+        return createObjectStore(InitialState, (state: Readonly<State>) => {
+            litRender(this.render(state), this);
+        }, this);
+    })();
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
         return html`
