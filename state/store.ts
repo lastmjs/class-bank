@@ -20,7 +20,8 @@ const InitialGlobalState: Readonly<GlobalState> = persistedGlobalState || {
         search: ''
     },
     studentGroups: {},
-    studentAccounts: {}
+    studentAccounts: {},
+    topBarText: ''
 };
 
 function rootReducer(
@@ -29,9 +30,16 @@ function rootReducer(
 ): Readonly<GlobalState> {
 
     if (action.type === 'SET_ROUTE') {
+        const routesToTopBarText = {
+            '/': 'Classes',
+            '/student-group': 'Class',
+            '/student-account': 'Student'
+        };
+
         return {
             ...state,
-            route: action.route
+            route: action.route,
+            topBarText: routesToTopBarText[action.route.pathname]
         };
     }
 

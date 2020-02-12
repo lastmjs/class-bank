@@ -7,6 +7,7 @@ export type GlobalState = {
     readonly route: Readonly<Route>;
     readonly studentGroups: Readonly<StudentGroups>;
     readonly studentAccounts: Readonly<StudentAccounts>;
+    readonly topBarText: string;
 };
 
 export type StudentGroups = Readonly<{

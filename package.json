@@ -21,7 +21,7 @@
     "lit-html": "1.1.2",
     "quagga": "0.12.1",
     "reduxular": "0.0.2",
-    "zwitterion": "0.45.0"
+    "zwitterion": "0.42.2"
   },
   "devDependencies": {
     "snowpack": "1.1.4"
