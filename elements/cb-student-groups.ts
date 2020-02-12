@@ -131,7 +131,7 @@ class CBStudentGroups extends HTMLElement {
                                     <br>
                                     <div>Students: ${studentAccountsForStudentGroup.length}</div>
                                     <br>
-                                    <div>Funds: $${totalFunds.toFixed(2)}</div>
+                                    <div>Funds: $${(totalFunds / 100).toFixed(2)}</div>
                                 </div>
                             `;
                         })}
