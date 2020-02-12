@@ -11,12 +11,12 @@ import {
 import { createObjectStore } from 'reduxular';
 
 type State = {
-    readonly accountId: string | null;
+    readonly studentAccountId: string | null;
     readonly studentAccounts: Readonly<StudentAccounts>;
 };
 
 const InitialState: Readonly<State> = {
-    accountId: null,
+    studentAccountId: null,
     studentAccounts: GlobalStore.getState().studentAccounts
 };
 
@@ -40,14 +40,14 @@ class CBStudentAccount extends HTMLElement {
 
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
-            studentAccountId: this.store.getState().accountId,
+            studentAccountId: this.store.getState().studentAccountId,
             amount: dollarAmount * 100
         });
     }
 
     render(state: Readonly<State>): Readonly<TemplateResult> {
 
-        const account: Readonly<StudentAccount> | undefined = state.studentAccounts[state.accountId];
+        const account: Readonly<StudentAccount> | undefined = state.studentAccounts[state.studentAccountId];
 
         if (account === undefined) {
             return html`<div>Loading...</div>`;
