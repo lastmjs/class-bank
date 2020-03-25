@@ -48,7 +48,11 @@ class CBStudentGroup extends HTMLElement {
 
     set studentGroupId(studentGroupId: string) {
         
-        if (this.localStore.studentGroupId === studentGroupId) {
+        if (
+            studentGroupId === null ||
+            studentGroupId === undefined ||
+            this.localStore.studentGroupId === studentGroupId
+        ) {
             return;
         }
 
@@ -154,6 +158,10 @@ class CBStudentGroup extends HTMLElement {
                             <br>
 
                             <div>${studentAccount.name}</div>
+
+                            <br>
+
+                            <div>Balance: $${(studentAccount.balance / 100).toFixed(2)}</div>
                         </div>
                     `;
                 })}

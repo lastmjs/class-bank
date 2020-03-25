@@ -77,13 +77,15 @@ function rootReducer(
 
         const studentAccount: Readonly<StudentAccount> = state.studentAccounts[action.studentAccountId];
 
+        const newBalance: number = studentAccount.balance + action.amount;
+
         return {
             ...state,
             studentAccounts: {
                 ...state.studentAccounts,
                 [studentAccount.id]: {
                     ...studentAccount,
-                    balance: studentAccount.balance + action.amount
+                    balance: newBalance < 0 ? 0 : newBalance
                 }
             }
         };
