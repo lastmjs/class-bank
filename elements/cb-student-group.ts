@@ -6,21 +6,21 @@ import {
 import { GlobalStore } from '../state/store';
 import {
     StudentGroup,
-    StudentAccount,
-    StudentGroups,
-    StudentAccounts
+    StudentAccount
 } from '..';
-import Quagga from '../web_modules/quagga.js';
 import { navigate } from '../services/utilities';
 import { createObjectStore } from 'reduxular';
 import { GlobalState } from '../index.d';
+import './cb-scanner';
 
 type LocalState = {
     readonly studentGroupId: string | null;
+    readonly showScanner: boolean;
 };
 
 const InitialLocalState: Readonly<LocalState> = {
-    studentGroupId: null
+    studentGroupId: null,
+    showScanner: false
 };
 
 class CBStudentGroup extends HTMLElement {
@@ -66,39 +66,23 @@ class CBStudentGroup extends HTMLElement {
         });
     }
 
-    // TODO I don't really want the thing to return multiple results, just one, but I'm not sure it's really a problem
     scanNewAccount() {
-        Quagga.init({
-            inputStream: {
-                name: 'Live',
-                type: 'LiveStream',
-                target: this.querySelector('#barcode-target')
-            },
-            decoder: {
-                readers: ['code_128_reader']
-            }
-        }, (err) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
+        this.localStore.showScanner = true;
+    }
 
-            console.log('Quagga initialized');
-            Quagga.start();
+    scanNewAccountCompleted(e: any) {
+        this.localStore.showScanner = false;
 
-            Quagga.onDetected((data) => {
-                Quagga.stop();
-                this.querySelector('#barcode-target').innerHTML = ``;
-                console.log(data);
-
-                GlobalStore.dispatch({
-                    type: 'CREATE_STUDENT_ACCOUNT',
-                    id: data.codeResult.code,
-                    name: `Test ${new Date().toLocaleDateString()}`,
-                    studentGroupId: this.localStore.getState().studentGroupId
-                });
-            });
+        GlobalStore.dispatch({
+            type: 'CREATE_STUDENT_ACCOUNT',
+            id: e.detail,
+            name: `Test ${new Date().toLocaleDateString()}`,
+            studentGroupId: this.localStore.getState().studentGroupId
         });
+    }
+
+    scanNewAccountCanceled() {
+        this.localStore.showScanner = false;
     }
 
     render(
@@ -175,7 +159,12 @@ class CBStudentGroup extends HTMLElement {
                 })}
             </div>
 
-            <div id="barcode-target"></div>
+            ${localState.showScanner ? html`
+                <cb-scanner
+                    @scan-completed=${(e: any) => this.scanNewAccountCompleted(e)}
+                    @scan-canceled=${() => this.scanNewAccountCanceled()}
+                ></cb-scanner>
+            ` : ''}
         `;
     }
 }
