@@ -19,37 +19,41 @@ import {
 import './cb-router';
 import { GlobalStore } from '../state/store';
 import { createObjectStore } from 'reduxular';
+import { GlobalState } from '../index.d';
 
-type State = {
-    topBarText: string;
+type LocalState = {
 };
 
-const InitialState: Readonly<State> = {
-    topBarText: ''
+const InitialLocalState: Readonly<LocalState> = {
 };
 
 class CBApp extends HTMLElement {
 
-    readonly store = (() => {
+    readonly localStore = (() => {
 
         GlobalStore.subscribe(() => {
-            this.store.topBarText = GlobalStore.getState().topBarText;
+            litRender(
+                this.render(
+                    this.localStore.getState(),
+                    GlobalStore.getState()
+                ),
+            this);
         });
 
-        return createObjectStore(InitialState, (state: Readonly<State>) => {
-            litRender(this.render(state), this);
+        return createObjectStore(InitialLocalState, (localState: Readonly<LocalState>) => {
+            litRender(
+                this.render(
+                    localState,
+                    GlobalStore.getState()
+                ),
+            this);
         }, this);
     })();
 
-    constructor() {
-        super();
-
-        GlobalStore.dispatch({
-            type: 'RENDER'
-        });
-    }
-
-    render(state: Readonly<State>): Readonly<TemplateResult> {
+    render(
+        localState: Readonly<LocalState>,
+        globalState: Readonly<GlobalState>
+    ): Readonly<TemplateResult> {
         return html`
             <style>
                 html {
@@ -88,7 +92,7 @@ class CBApp extends HTMLElement {
 
             <div class="cb-app-main-container">
                 <div class="cb-app-top-bar">
-                    <div class="cb-app-top-bar-text">${state.topBarText}</div>
+                    <div class="cb-app-top-bar-text">${globalState.topBarText}</div>
                 </div>
                 <cb-router></cb-router>
             </div>

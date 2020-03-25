@@ -13,31 +13,58 @@ import {
 import Quagga from '../web_modules/quagga.js';
 import { navigate } from '../services/utilities';
 import { createObjectStore } from 'reduxular';
+import { GlobalState } from '../index.d';
 
-type State = {
+type LocalState = {
     readonly studentGroupId: string | null;
-    readonly studentGroups: Readonly<StudentGroups>;
-    readonly studentAccounts: Readonly<StudentAccounts>;
 };
 
-const InitialState: Readonly<State> = {
-    studentGroupId: null,
-    studentGroups: GlobalStore.getState().studentGroups,
-    studentAccounts: GlobalStore.getState().studentAccounts
+const InitialLocalState: Readonly<LocalState> = {
+    studentGroupId: null
 };
 
 class CBStudentGroup extends HTMLElement {
 
-    readonly store = (() => {
+    readonly localStore = (() => {
+
         GlobalStore.subscribe(() => {
-            this.store.studentGroups = GlobalStore.getState().studentGroups;
-            this.store.studentAccounts = GlobalStore.getState().studentAccounts;
+            litRender(
+                this.render(
+                    this.localStore.getState(),
+                    GlobalStore.getState()
+                ),
+            this);
         });
 
-        return createObjectStore(InitialState, (state: Readonly<State>) => {
-            litRender(this.render(state), this);
+        return createObjectStore(InitialLocalState, (localState: Readonly<LocalState>) => {
+            litRender(
+                this.render(
+                    localState,
+                    GlobalStore.getState()
+                ),
+            this);
         }, this);
     })();
+
+    set studentGroupId(studentGroupId: string) {
+        
+        if (this.localStore.studentGroupId === studentGroupId) {
+            return;
+        }
+
+        this.localStore.studentGroupId = studentGroupId;
+
+        const studentGroup: Readonly<StudentGroup> = GlobalStore.getState().studentGroups[studentGroupId];
+
+        // TODO figure out why we have to throw this on the event loop to stop from overflowing the call stack
+        // TODO seems like this.localStore.studentGroupId is not updating correctly
+        setTimeout(() => {
+            GlobalStore.dispatch({
+                type: 'SET_TOP_BAR_TEXT',
+                topBarText: `${studentGroup.name}`
+            });
+        });
+    }
 
     // TODO I don't really want the thing to return multiple results, just one, but I'm not sure it's really a problem
     scanNewAccount() {
@@ -67,43 +94,84 @@ class CBStudentGroup extends HTMLElement {
                 GlobalStore.dispatch({
                     type: 'CREATE_STUDENT_ACCOUNT',
                     id: data.codeResult.code,
-                    name: `Test${new Date()}`,
-                    studentGroupId: this.store.getState().studentGroupId
+                    name: `Test ${new Date().toLocaleDateString()}`,
+                    studentGroupId: this.localStore.getState().studentGroupId
                 });
             });
         });
     }
 
-    render(state: Readonly<State>): Readonly<TemplateResult> {
+    render(
+        localState: Readonly<LocalState>,
+        globalState: Readonly<GlobalState>
+    ): Readonly<TemplateResult> {
 
-        const studentGroup: Readonly<StudentGroup> | undefined = state.studentGroups[state.studentGroupId];
+        const studentGroup: Readonly<StudentGroup> | undefined = globalState.studentGroups[localState.studentGroupId];
 
         if (studentGroup === undefined) {
             return html`<div>Loading...</div>`;
         }
 
-        const studentAccounts: ReadonlyArray<StudentAccount> = Object.values(state.studentAccounts).filter((studentAccount: Readonly<StudentAccount>) => {
+        const studentAccounts: ReadonlyArray<StudentAccount> = Object.values(globalState.studentAccounts).filter((studentAccount: Readonly<StudentAccount>) => {
             return studentAccount.studentGroupId === studentGroup.id;
         });
 
         return html`
-            <h1>Class</h1>
+            <style>
+                .cb-student-group-scan-button {
+                    background-color: white;
+                    cursor: pointer;
+                    font-size: calc(25px + 1vmin);
+                    border: none;
+                    box-shadow: 0px 0px 5px black;
+                    padding: calc(5px + 1vmin);
+                    margin-left: auto;
+                    margin-top: calc(5px + 1vmin);
+                    margin-right: calc(5px + 1vmin);
+                }
 
-            <h2>${studentGroup.name}</h2>
 
-            <h3>Accounts</h3>
-            
-            <br>
+                /* TODO we should probably make this into an element, copied in cb-student-group */
+                .cb-student-group-cards-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
 
-            <div>
-                <button @click=${() => this.scanNewAccount()}>Scan new account</button>
+                /* TODO we should probably make this into an element, copied in cb-student-group */
+                .cb-student-group-card {
+                    box-shadow: 0px 0px 5px black;
+                    padding: calc(5px + 1vmin);
+                    cursor: pointer;
+                    margin: calc(5px + 1vmin);
+                    min-width: 25vw;
+                    min-height: 25vh;
+                    font-size: calc(25px + 1vmin);
+                    border-radius: calc(1px + 1vmin);
+                }
+
+            </style>
+
+            <div style="display: flex">
+                <button @click=${() => this.scanNewAccount()} class="cb-student-group-scan-button">Scan new account</button>
             </div>
 
             <br>
 
-            <div>
+            <div class="cb-student-groups-cards-container">
                 ${studentAccounts.map((studentAccount: Readonly<StudentAccount>) => {
-                    return html`<div style="padding: 5px; cursor: pointer" @click=${() => navigate(`/student-account?studentAccountId=${studentAccount.id}`)}>${studentAccount.id}</div>`;
+                    return html`
+                        <div
+                            class="cb-student-groups-card"
+                            @click=${() => navigate(`/student-account?studentAccountId=${studentAccount.id}`)}
+                        >
+                            <div>${studentAccount.id}</div>
+
+                            <br>
+
+                            <div>${studentAccount.name}</div>
+                        </div>
+                    `;
                 })}
             </div>
 

@@ -15,33 +15,35 @@ import { navigate } from '../services/utilities';
 import {
     createObjectStore
 } from 'reduxular';
+import { GlobalState } from '../index.d';
 
-type State = {
-    readonly studentGroups: Readonly<StudentGroups>;
-    readonly studentAccounts: Readonly<StudentAccounts>;
+type LocalState = {
 };
 
-const InitialState: Readonly<State> = {
-    studentGroups: GlobalStore.getState().studentGroups,
-    studentAccounts: GlobalStore.getState().studentAccounts
+const InitialLocalState: Readonly<LocalState> = {
 };
 
 class CBStudentGroups extends HTMLElement {
     
-    readonly store = (() => {
+    readonly localStore = (() => {
 
         GlobalStore.subscribe(() => {
-            this.store.studentGroups = GlobalStore.getState().studentGroups;
-            this.store.studentAccounts = GlobalStore.getState().studentAccounts;
+            litRender(
+                this.render(
+                    this.localStore.getState(),
+                    GlobalStore.getState()
+                ),
+            this);
         });
 
-        return createObjectStore(
-            InitialState, 
-            (state: Readonly<State>) => {
-                litRender(this.render(state), this)       
-            }, 
-            this
-        );
+        return createObjectStore(InitialLocalState, (localState: Readonly<LocalState>) => {
+            litRender(
+                this.render(
+                    localState,
+                    GlobalStore.getState()
+                ),
+            this);
+        }, this);
     })();
     
     createClass() {
@@ -53,16 +55,21 @@ class CBStudentGroups extends HTMLElement {
         });
     }
 
-    render(state: Readonly<State>): Readonly<TemplateResult> {
+    render(
+        localState: Readonly<LocalState>,
+        globalState: Readonly<GlobalState>
+    ): Readonly<TemplateResult> {
         return html`
             <style>
 
+                /* TODO we should probably make this into an element, copied in cb-student-group */
                 .cb-student-groups-cards-container {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: center;
                 }
 
+                /* TODO we should probably make this into an element, copied in cb-student-group */
                 .cb-student-groups-card {
                     box-shadow: 0px 0px 5px black;
                     padding: calc(5px + 1vmin);
@@ -115,9 +122,9 @@ class CBStudentGroups extends HTMLElement {
                     <br>
 
                     <div class="cb-student-groups-cards-container">
-                        ${Object.values(state.studentGroups).map((studentGroup: Readonly<StudentGroup>) => {
+                        ${Object.values(globalState.studentGroups).map((studentGroup: Readonly<StudentGroup>) => {
 
-                            const studentAccountsForStudentGroup: ReadonlyArray<StudentAccount> = Object.values(state.studentAccounts).filter((studentAccount: Readonly<StudentAccount>) => {
+                            const studentAccountsForStudentGroup: ReadonlyArray<StudentAccount> = Object.values(globalState.studentAccounts).filter((studentAccount: Readonly<StudentAccount>) => {
                                 return studentAccount.studentGroupId === studentGroup.id;
                             });
 

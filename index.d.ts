@@ -19,6 +19,7 @@ export type StudentAccounts = Readonly<{
 }>;
 
 export type Action = 
+    SET_TOP_BAR_TEXT |
     ADD_TO_BALANCE |
     CREATE_STUDENT_GROUP |
     CREATE_STUDENT_ACCOUNT |
@@ -50,6 +51,11 @@ type CREATE_STUDENT_ACCOUNT = {
 
 type RENDER = {
     readonly type: 'RENDER';
+};
+
+type SET_TOP_BAR_TEXT = {
+    readonly type: 'SET_TOP_BAR_TEXT';
+    readonly topBarText: string;
 };
 
 export type CBGlobalStore = Readonly<Store<Readonly<GlobalState>, Readonly<Action>>>;

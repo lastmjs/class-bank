@@ -31,9 +31,7 @@ function rootReducer(
 
     if (action.type === 'SET_ROUTE') {
         const routesToTopBarText = {
-            '/': 'Classes',
-            '/student-group': 'Class',
-            '/student-account': 'Student'
+            '/': 'Classes'
         };
 
         return {
@@ -88,6 +86,13 @@ function rootReducer(
                     balance: studentAccount.balance + action.amount
                 }
             }
+        };
+    }
+
+    if (action.type === 'SET_TOP_BAR_TEXT') {
+        return {
+            ...state,
+            topBarText: action.topBarText
         };
     }
 
