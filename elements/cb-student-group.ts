@@ -81,7 +81,7 @@ class CBStudentGroup extends HTMLElement {
         GlobalStore.dispatch({
             type: 'CREATE_STUDENT_ACCOUNT',
             id: e.detail,
-            name: `Test ${new Date().toLocaleDateString()}`,
+            name: '',
             studentGroupId: this.localStore.getState().studentGroupId
         });
     }
