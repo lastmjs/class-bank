@@ -12,10 +12,14 @@ import { createObjectStore } from 'reduxular';
 
 type LocalState = {
     readonly studentAccountId: string | null;
+    readonly depositInputValue: string;
+    readonly withdrawInputValue: string;
 };
 
 const InitialLocalState: Readonly<LocalState> = {
-    studentAccountId: null
+    studentAccountId: null,
+    depositInputValue: '0',
+    withdrawInputValue: '0'
 };
 
 class CBStudentAccount extends HTMLElement {
@@ -61,40 +65,42 @@ class CBStudentAccount extends HTMLElement {
         });
     }
 
-    addToBalance() {
-        const dollarAmount = (this.querySelector(`#input-dollar-amount`) as any).value;
-
-        GlobalStore.dispatch({
-            type: 'ADD_TO_BALANCE',
-            studentAccountId: this.localStore.getState().studentAccountId,
-            amount: dollarAmount * 100
-        });
-    }
-
     deposit() {
-        const dollarAmount = (this.querySelector(`#cb-student-account-deposit-input`) as any).value;
-
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
-            amount: Math.abs(dollarAmount) * 100
+            amount: Math.abs(parseInt(this.localStore.depositInputValue)) * 100
         });
+
+        this.localStore.depositInputValue = '0';
     }
 
     withdraw() {
-        const dollarAmount = (this.querySelector(`#cb-student-account-withdraw-input`) as any).value;
-
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
-            amount: -Math.abs(dollarAmount) * 100
+            amount: -Math.abs(parseInt(this.localStore.withdrawInputValue)) * 100
         });
+
+        this.localStore.withdrawInputValue = '0';
+    }
+
+    depositInputChanged(e: any) {
+        const depositInputValue: string = e.target.value;
+        this.localStore.depositInputValue = depositInputValue;
+    }
+
+    withdrawInputChanged(e: any) {
+        const withdrawInputValue: string = e.target.value;
+        this.localStore.withdrawInputValue = withdrawInputValue;
     }
 
     render(
         localState: Readonly<LocalState>,
         globalState: Readonly<GlobalState>
     ): Readonly<TemplateResult> {
+
+        console.log(localState)
 
         const account: Readonly<StudentAccount> | undefined = globalState.studentAccounts[localState.studentAccountId];
 
@@ -160,11 +166,11 @@ class CBStudentAccount extends HTMLElement {
                         <div class="cb-student-account-monetary-label">Balance</div>
                     </div>
                     <div class="cb-student-account-monetary-item-container">
-                        <input id="cb-student-account-deposit-input" type="number" min="0" value="0" class="cb-student-account-monetary-input">
+                        <input id="cb-student-account-deposit-input" type="number" min="0" @input=${(e: any) => this.depositInputChanged(e)} .value=${localState.depositInputValue} class="cb-student-account-monetary-input">
                         <button class="cb-student-account-monetary-button" @click=${() => this.deposit()}>Deposit</button>
                     </div>
                     <div class="cb-student-account-monetary-item-container">
-                        <input id="cb-student-account-withdraw-input" type="number" min="0" value="0" class="cb-student-account-monetary-input">
+                        <input id="cb-student-account-withdraw-input" type="number" min="0" @input=${(e: any) => this.withdrawInputChanged(e)} .value=${localState.withdrawInputValue} class="cb-student-account-monetary-input">
                         <button class="cb-student-account-monetary-button" @click=${() => this.withdraw()}>Withdraw</button>
                     </div>
                 </div>
