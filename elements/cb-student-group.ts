@@ -53,6 +53,7 @@ class CBStudentGroup extends HTMLElement {
             studentGroupId === undefined ||
             this.localStore.studentGroupId === studentGroupId
         ) {
+            this.localStore.studentGroupId = studentGroupId;
             return;
         }
 
