@@ -71,6 +71,11 @@ class CBStudentAccount extends HTMLElement {
     }
 
     deposit() {
+
+        if (isNaN(parseFloat(this.localStore.depositInputValue))) {
+            return;
+        }
+
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
@@ -81,6 +86,11 @@ class CBStudentAccount extends HTMLElement {
     }
 
     withdraw() {
+
+        if (isNaN(parseFloat(this.localStore.withdrawInputValue))) {
+            return;
+        }
+
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
