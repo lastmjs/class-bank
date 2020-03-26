@@ -19,6 +19,7 @@ export type StudentAccounts = Readonly<{
 }>;
 
 export type Action = 
+    UPDATE_STUDENT_NAME |
     SET_TOP_BAR_TEXT |
     ADD_TO_BALANCE |
     CREATE_STUDENT_GROUP |
@@ -48,6 +49,12 @@ type CREATE_STUDENT_ACCOUNT = {
     readonly studentGroupId: string;
     readonly name: string;
 };
+
+type UPDATE_STUDENT_NAME = {
+    readonly type: 'UPDATE_STUDENT_NAME';
+    readonly studentAccountId: string;
+    readonly name: string;
+}
 
 type RENDER = {
     readonly type: 'RENDER';

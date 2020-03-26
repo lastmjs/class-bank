@@ -47,7 +47,12 @@ class CBStudentAccount extends HTMLElement {
 
     set studentAccountId(studentAccountId: string) {
         
-        if (this.localStore.studentAccountId === studentAccountId) {
+        if (
+            studentAccountId === null ||
+            studentAccountId === undefined ||
+            this.localStore.studentAccountId === studentAccountId
+        ) {
+            this.localStore.studentAccountId = studentAccountId;
             return;
         }
 
@@ -95,6 +100,14 @@ class CBStudentAccount extends HTMLElement {
         this.localStore.withdrawInputValue = withdrawInputValue;
     }
 
+    updateStudentName(e: any) {
+        GlobalStore.dispatch({
+            type: 'UPDATE_STUDENT_NAME',
+            studentAccountId: this.localStore.studentAccountId,
+            name: e.target.value
+        })
+    }
+
     render(
         localState: Readonly<LocalState>,
         globalState: Readonly<GlobalState>
@@ -118,7 +131,7 @@ class CBStudentAccount extends HTMLElement {
                     height: 100%;
                     padding: calc(5px + 1vmin);
                     display: grid;
-                    grid-template-rows: 5fr 10fr 10fr 10fr;
+                    grid-template-rows: 2fr 5fr 10fr 10fr 10fr;
                 }
 
                 .cb-student-account-student-account-id {
@@ -161,6 +174,9 @@ class CBStudentAccount extends HTMLElement {
             <div class="cb-student-account-main-container">
                 <div class="cb-student-account-grid-container">
                     <div class="cb-student-account-student-account-id">${account.id}</div>
+                    <div class="cb-student-account-monetary-item-container">
+                        <input class="cb-student-account-monetary-input" style="font-size: calc(50px + 1vmin)" type="text" placeholder="Add name" .value=${account.name} @input=${(e: any) => this.updateStudentName(e)}>
+                    </div>
                     <div class="cb-student-account-monetary-item-container">
                         <div style="font-size: calc(100px + 1vmin)">$${(account.balance / 100).toFixed(2)}</div>
                         <div class="cb-student-account-monetary-label">Balance</div>

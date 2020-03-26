@@ -98,6 +98,19 @@ function rootReducer(
         };
     }
 
+    if (action.type === 'UPDATE_STUDENT_NAME') {
+        return {
+            ...state,
+            studentAccounts: {
+                ...state.studentAccounts,
+                [action.studentAccountId]: {
+                    ...state.studentAccounts[action.studentAccountId],
+                    name: action.name
+                }
+            }
+        };
+    }
+
     return state;
 }
 
