@@ -74,7 +74,7 @@ class CBStudentAccount extends HTMLElement {
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
-            amount: Math.abs(parseInt(this.localStore.depositInputValue)) * 100
+            amount: Math.abs(parseFloat(this.localStore.depositInputValue)) * 100
         });
 
         this.localStore.depositInputValue = '0';
@@ -84,7 +84,7 @@ class CBStudentAccount extends HTMLElement {
         GlobalStore.dispatch({
             type: 'ADD_TO_BALANCE',
             studentAccountId: this.localStore.getState().studentAccountId,
-            amount: -Math.abs(parseInt(this.localStore.withdrawInputValue)) * 100
+            amount: -Math.abs(parseFloat(this.localStore.withdrawInputValue)) * 100
         });
 
         this.localStore.withdrawInputValue = '0';
@@ -105,15 +105,13 @@ class CBStudentAccount extends HTMLElement {
             type: 'UPDATE_STUDENT_NAME',
             studentAccountId: this.localStore.studentAccountId,
             name: e.target.value
-        })
+        });
     }
 
     render(
         localState: Readonly<LocalState>,
         globalState: Readonly<GlobalState>
     ): Readonly<TemplateResult> {
-
-        console.log(localState)
 
         const account: Readonly<StudentAccount> | undefined = globalState.studentAccounts[localState.studentAccountId];
 
