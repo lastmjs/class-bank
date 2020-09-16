@@ -23,6 +23,7 @@ export type Action =
     SET_TOP_BAR_TEXT |
     ADD_TO_BALANCE |
     CREATE_STUDENT_GROUP |
+    DELETE_STUDENT_GROUP |
     CREATE_STUDENT_ACCOUNT |
     SET_ROUTE |
     RENDER;
@@ -41,6 +42,11 @@ type SET_ROUTE = {
 type CREATE_STUDENT_GROUP = {
     readonly type: 'CREATE_STUDENT_GROUP';
     readonly name: string;
+};
+
+type DELETE_STUDENT_GROUP = {
+    readonly type: 'DELETE_STUDENT_GROUP';
+    readonly studentGroupId: string;
 };
 
 type CREATE_STUDENT_ACCOUNT = {

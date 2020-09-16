@@ -55,6 +55,15 @@ class CBStudentGroups extends HTMLElement {
         });
     }
 
+    deleteStudentGroup(e: any, studentGroupId: string) {
+        e.stopPropagation();
+
+        GlobalStore.dispatch({
+            type: 'DELETE_STUDENT_GROUP',
+            studentGroupId
+        });
+    }
+
     render(
         localState: Readonly<LocalState>,
         globalState: Readonly<GlobalState>
@@ -139,6 +148,8 @@ class CBStudentGroups extends HTMLElement {
                                     <div>Students: ${studentAccountsForStudentGroup.length}</div>
                                     <br>
                                     <div>Funds: $${(totalFunds / 100).toFixed(2)}</div>
+                                    <br>
+                                    <button @click=${(e: any) => this.deleteStudentGroup(e, studentGroup.id)}>Delete</button>
                                 </div>
                             `;
                         })}

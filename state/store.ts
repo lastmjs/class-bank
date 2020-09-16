@@ -56,6 +56,18 @@ function rootReducer(
         };
     }
 
+    if (action.type === 'DELETE_STUDENT_GROUP') {
+        const {
+            [action.studentGroupId]: removedStudentGroup,
+            ...remainingStudentGroups
+        } = state.studentGroups;
+
+        return {
+            ...state,
+            studentGroups: remainingStudentGroups
+        };
+    }
+
     if (action.type === 'CREATE_STUDENT_ACCOUNT') {
         const newStudentAccount: Readonly<StudentAccount> = {
             id: action.id,
