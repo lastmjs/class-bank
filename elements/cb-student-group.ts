@@ -90,6 +90,19 @@ class CBStudentGroup extends HTMLElement {
         this.localStore.showScanner = false;
     }
 
+    deleteStudentAccount(e: any, studentAccountId: string) {
+        e.stopPropagation();
+
+        const confirmed: boolean = confirm(`Are you sure you want to delete this student?`);
+
+        if (confirmed === true) {
+            GlobalStore.dispatch({
+                type: 'DELETE_STUDENT_ACCOUNT',
+                studentAccountId
+            });
+        }
+    }
+
     render(
         localState: Readonly<LocalState>,
         globalState: Readonly<GlobalState>
@@ -171,6 +184,10 @@ class CBStudentGroup extends HTMLElement {
                             <br>
 
                             <div>Balance: $${(studentAccount.balance / 100).toFixed(2)}</div>
+
+                            <br>
+
+                            <button @click=${(e: any) => this.deleteStudentAccount(e, studentAccount.id)}>Delete</button>
                         </div>
                     `;
                 })}
