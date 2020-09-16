@@ -25,6 +25,7 @@ export type Action =
     CREATE_STUDENT_GROUP |
     DELETE_STUDENT_GROUP |
     CREATE_STUDENT_ACCOUNT |
+    DELETE_STUDENT_ACCOUNT |
     SET_ROUTE |
     RENDER;
 
@@ -54,6 +55,11 @@ type CREATE_STUDENT_ACCOUNT = {
     readonly id: string;
     readonly studentGroupId: string;
     readonly name: string;
+};
+
+type DELETE_STUDENT_ACCOUNT = {
+    readonly type: 'DELETE_STUDENT_ACCOUNT';
+    readonly studentAccountId: string;
 };
 
 type UPDATE_STUDENT_NAME = {

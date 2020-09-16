@@ -58,10 +58,14 @@ class CBStudentGroups extends HTMLElement {
     deleteStudentGroup(e: any, studentGroupId: string) {
         e.stopPropagation();
 
-        GlobalStore.dispatch({
-            type: 'DELETE_STUDENT_GROUP',
-            studentGroupId
-        });
+        const confirmed: boolean = confirm(`Are you sure you want to delete this class?`);
+
+        if (confirmed === true) {
+            GlobalStore.dispatch({
+                type: 'DELETE_STUDENT_GROUP',
+                studentGroupId
+            });
+        }
     }
 
     render(
