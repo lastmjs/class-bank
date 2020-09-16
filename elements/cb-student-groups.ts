@@ -120,6 +120,10 @@ class CBStudentGroups extends HTMLElement {
                     margin-top: calc(5px + 1vmin);
                     margin-right: calc(5px + 1vmin);
                 }
+
+                .cb-student-groups-delete-button {
+                    font-size: calc(25px + 1vmin);
+                }
             </style>
 
             <div>
@@ -153,7 +157,7 @@ class CBStudentGroups extends HTMLElement {
                                     <br>
                                     <div>Funds: $${(totalFunds / 100).toFixed(2)}</div>
                                     <br>
-                                    <button @click=${(e: any) => this.deleteStudentGroup(e, studentGroup.id)}>Delete</button>
+                                    <button class="cb-student-groups-delete-button" @click=${(e: any) => this.deleteStudentGroup(e, studentGroup.id)}>Delete</button>
                                 </div>
                             `;
                         })}

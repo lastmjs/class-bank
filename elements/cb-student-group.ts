@@ -164,6 +164,10 @@ class CBStudentGroup extends HTMLElement {
                     border-radius: calc(1px + 1vmin);
                 }
 
+                .cb-student-group-delete-button {
+                    font-size: calc(25px + 1vmin);
+                }
+
             </style>
 
             <div style="display: flex">
@@ -187,7 +191,7 @@ class CBStudentGroup extends HTMLElement {
 
                             <br>
 
-                            <button @click=${(e: any) => this.deleteStudentAccount(e, studentAccount.id)}>Delete</button>
+                            <button class="cb-student-group-delete-button" @click=${(e: any) => this.deleteStudentAccount(e, studentAccount.id)}>Delete</button>
                         </div>
                     `;
                 })}
