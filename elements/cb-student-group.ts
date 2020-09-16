@@ -105,6 +105,18 @@ class CBStudentGroup extends HTMLElement {
             return studentAccount.studentGroupId === studentGroup.id;
         });
 
+        const sortedStudentAccounts: ReadonlyArray<StudentAccount> = [...studentAccounts].sort((a: Readonly<StudentAccount>, b: Readonly<StudentAccount>) => {
+            if (a.name > b.name) {
+                return 1;
+            }
+
+            if (a.name < b.name) {
+                return -1;
+            }
+
+            return 0;
+        });
+
         return html`
             <style>
                 .cb-student-group-scan-button {
@@ -148,7 +160,7 @@ class CBStudentGroup extends HTMLElement {
             <br>
 
             <div class="cb-student-groups-cards-container">
-                ${studentAccounts.map((studentAccount: Readonly<StudentAccount>) => {
+                ${sortedStudentAccounts.map((studentAccount: Readonly<StudentAccount>) => {
                     return html`
                         <div
                             class="cb-student-groups-card"
