@@ -154,10 +154,6 @@ class CBStudentGroup extends HTMLElement {
                             class="cb-student-groups-card"
                             @click=${() => navigate(`/student-account?studentAccountId=${studentAccount.id}`)}
                         >
-                            <div>${studentAccount.id}</div>
-
-                            <br>
-
                             <div>${studentAccount.name}</div>
 
                             <br>

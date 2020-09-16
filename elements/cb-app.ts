@@ -57,6 +57,22 @@ class CBApp extends HTMLElement {
     scanAccountCompleted(e: any) {
         this.localStore.showScanner = false;
 
+        // TODO I would like to have the global scan either create an account or take you to an account
+        // TODO the problem is that we need to associate the studentGroupId somehow...we'd have to add
+        // TODO a screen to let the teacher to choose the group or something like that
+        // TODO or we could just let the scan only work to create an account if you're on the class screen
+        // const possibleStudentAccount: Readonly<StudentAccount> | undefined = GlobalStore.getState().studentAccounts[e.detail];
+        // const accountExists: boolean = possibleStudentAccount !== undefined;
+
+        // if (accountExists === false) {
+        //     GlobalStore.dispatch({
+        //         type: 'CREATE_STUDENT_ACCOUNT',
+        //         id: e.detail,
+        //         name: '',
+        //         studentGroupId: this.localStore.getState().studentGroupId
+        //     });    
+        // }
+
         navigate(`/student-account?studentAccountId=${e.detail}`);
     }
 
