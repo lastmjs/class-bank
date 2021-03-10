@@ -4,7 +4,8 @@
   "description": "A classroom banking system",
   "scripts": {
     "start": "zwitterion --port 4444",
-    "build": "zwitterion --port 4444 --build-static --exclude node_modules,web_modules --include lit-html,reduxular,redux/es"
+    "build": "zwitterion --port 4444 --build-static --exclude node_modules,web_modules --include lit-html,reduxular,redux/es && npm run clean-up-for-ic-deploy",
+    "clean-up-for-ic-deploy": "rm -r dist/node_modules/typescript && rm dist/node_modules/binaryen/index.js"
   },
   "repository": {
     "type": "git",
